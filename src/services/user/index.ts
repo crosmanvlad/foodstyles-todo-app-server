@@ -3,10 +3,11 @@ import bcrypt from 'bcrypt';
 import { models } from '../../models'
 
 export abstract class UserService {
-  static async insert({username, password}) {
+  static async insert({name, username, password}) {
     const hashedPassword = await this.hashPassword(password)
     const user = await models.User.create({
       username,
+      name,
       password: hashedPassword
     })
     return user;

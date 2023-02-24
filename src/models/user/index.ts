@@ -2,6 +2,10 @@ import { DataTypes } from "sequelize";
 
 const getUserModel = (sequelize) => {
   const User = sequelize.define('user', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     username: {
       type: DataTypes.STRING,
       unique: true,
