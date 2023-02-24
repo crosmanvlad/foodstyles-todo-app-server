@@ -2,8 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { UserService } from "../../services/user";
 import Joi from 'joi';
 
-const schema = Joi.object({
+const SignupSchema = Joi.object({
   name: Joi.string().required(),
+  username: Joi.string().required(),
+  password: Joi.string().required()
+})
+
+const LoginSchema = Joi.object({
   username: Joi.string().required(),
   password: Joi.string().required()
 })
@@ -11,7 +16,7 @@ const schema = Joi.object({
 export class UserController {
   async signup(req: Request, res: Response, next: NextFunction) {
     try {
-      const {value, error} = schema.validate(req.body);
+      const {value, error} = SignupSchema.validate(req.body);
       if (error) throw error;
       const insertUserResponse = await UserService.insert(value);
       res.send(insertUserResponse);
@@ -23,10 +28,10 @@ export class UserController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const {value, error} = schema.validate(req.body);
+      const {value, error} = LoginSchema.validate(req.body);
       if (error) throw error;
       const accessToken = await UserService.login(value);
-      res.set('x-access-token', accessToken).send();
+      res.send(accessToken);
     } catch (err) {
       console.error(err);
       next(err);
